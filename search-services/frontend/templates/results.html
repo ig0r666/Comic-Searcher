@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .comic {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .comic img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Результаты по поиску: "{{.Query}}"</h1>
+        <a href="/">Вернуться на главную</a>
+        <div class="results">
+            {{range .Comics}}
+            <div class="comic">
+                <img src="{{.ImageURL}}" alt="Comic {{.ID}}">
+                <p>Comic ID: {{.ID}}</p>
+            </div>
+            {{else}}
+            <p>По вашему запросу не найдено комиксов 😔</p>
+            {{end}}
+        </div>
+    </div>
+</body>
+</html>

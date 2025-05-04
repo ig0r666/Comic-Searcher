@@ -1,0 +1,4 @@
+log_level: DEBUG
+address: localhost:84
+api_address: localhost:80
+template_path: /templates

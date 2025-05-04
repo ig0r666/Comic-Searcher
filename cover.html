@@ -1,0 +1,2232 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>aaa: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">yadro.com/course/api/adapters/aaa/auth.go (87.5%)</option>
+				
+				<option value="file1">yadro.com/course/api/adapters/rest/api.go (62.1%)</option>
+				
+				<option value="file2">yadro.com/course/api/adapters/rest/middleware/auth.go (100.0%)</option>
+				
+				<option value="file3">yadro.com/course/api/adapters/rest/middleware/concurrency.go (100.0%)</option>
+				
+				<option value="file4">yadro.com/course/api/adapters/rest/middleware/rate.go (100.0%)</option>
+				
+				<option value="file5">yadro.com/course/api/adapters/search/search.go (0.0%)</option>
+				
+				<option value="file6">yadro.com/course/api/adapters/update/update.go (0.0%)</option>
+				
+				<option value="file7">yadro.com/course/api/adapters/words/words.go (0.0%)</option>
+				
+				<option value="file8">yadro.com/course/api/config/config.go (75.0%)</option>
+				
+				<option value="file9">yadro.com/course/api/main.go (15.1%)</option>
+				
+				<option value="file10">yadro.com/course/search/adapters/db/storage.go (50.0%)</option>
+				
+				<option value="file11">yadro.com/course/search/adapters/grpc/server.go (0.0%)</option>
+				
+				<option value="file12">yadro.com/course/search/adapters/index/index.go (70.2%)</option>
+				
+				<option value="file13">yadro.com/course/search/adapters/words/words.go (0.0%)</option>
+				
+				<option value="file14">yadro.com/course/search/config/config.go (75.0%)</option>
+				
+				<option value="file15">yadro.com/course/search/core/service.go (100.0%)</option>
+				
+				<option value="file16">yadro.com/course/search/main.go (0.0%)</option>
+				
+				<option value="file17">yadro.com/course/update/adapters/db/migrations.go (0.0%)</option>
+				
+				<option value="file18">yadro.com/course/update/adapters/db/storage.go (66.7%)</option>
+				
+				<option value="file19">yadro.com/course/update/adapters/grpc/server.go (0.0%)</option>
+				
+				<option value="file20">yadro.com/course/update/adapters/words/words.go (0.0%)</option>
+				
+				<option value="file21">yadro.com/course/update/adapters/xkcd/xkcd.go (82.8%)</option>
+				
+				<option value="file22">yadro.com/course/update/config/config.go (75.0%)</option>
+				
+				<option value="file23">yadro.com/course/update/core/service.go (76.1%)</option>
+				
+				<option value="file24">yadro.com/course/update/main.go (0.0%)</option>
+				
+				<option value="file25">yadro.com/course/words/main.go (0.0%)</option>
+				
+				<option value="file26">yadro.com/course/words/words/words.go (94.7%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package aaa
+
+import (
+        "fmt"
+        "log/slog"
+        "os"
+        "time"
+
+        jwt "github.com/golang-jwt/jwt/v5"
+)
+
+const secretKey = "something secret here" // token sign key
+const adminRole = "superuser"             // token subject
+
+// Authentication, Authorization, Accounting
+type AAA struct {
+        users    map[string]string
+        tokenTTL time.Duration
+        log      *slog.Logger
+}
+
+func New(tokenTTL time.Duration, log *slog.Logger) (AAA, error) <span class="cov10" title="5">{
+        const adminUser = "ADMIN_USER"
+        const adminPass = "ADMIN_PASSWORD"
+        user, ok := os.LookupEnv(adminUser)
+        if !ok </span><span class="cov1" title="1">{
+                return AAA{}, fmt.Errorf("could not get admin user from environment")
+        }</span>
+        <span class="cov8" title="4">password, ok := os.LookupEnv(adminPass)
+        if !ok </span><span class="cov1" title="1">{
+                return AAA{}, fmt.Errorf("could not get admin password from environment")
+        }</span>
+
+        <span class="cov7" title="3">return AAA{
+                users:    map[string]string{user: password},
+                tokenTTL: tokenTTL,
+                log:      log,
+        }, nil</span>
+}
+
+func (a AAA) Login(name, password string) (string, error) <span class="cov10" title="5">{
+        pass, ok := a.users[name]
+        if !ok || pass != password </span><span class="cov7" title="3">{
+                return "", fmt.Errorf("invalid credentials")
+        }</span>
+
+        <span class="cov4" title="2">token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
+                Subject:   adminRole,
+                ExpiresAt: jwt.NewNumericDate(time.Now().Add(a.tokenTTL)),
+        })
+
+        tokenString, err := token.SignedString([]byte(secretKey))
+        if err != nil </span><span class="cov0" title="0">{
+                a.log.Error("failed to generate token", "error", err)
+                return "", fmt.Errorf("failed to generate token")
+        }</span>
+
+        <span class="cov4" title="2">return tokenString, nil</span>
+}
+
+func (a AAA) Verify(tokenString string) error <span class="cov8" title="4">{
+        token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) </span><span class="cov4" title="2">{
+                return []byte(secretKey), nil
+        }</span>)
+
+        <span class="cov8" title="4">if err != nil </span><span class="cov4" title="2">{
+                a.log.Error("failed to parse token", "error", err)
+                return err
+        }</span>
+
+        <span class="cov4" title="2">claims, ok := token.Claims.(jwt.MapClaims)
+        if !ok </span><span class="cov0" title="0">{
+                return fmt.Errorf("invalid claims")
+        }</span>
+
+        <span class="cov4" title="2">subject, err := claims.GetSubject()
+        if err != nil </span><span class="cov0" title="0">{
+                return fmt.Errorf("error get subject")
+        }</span>
+
+        <span class="cov4" title="2">if subject != adminRole </span><span class="cov1" title="1">{
+                return fmt.Errorf("invalid subject")
+        }</span>
+
+        <span class="cov1" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package rest
+
+import (
+        "encoding/json"
+        "log/slog"
+        "net/http"
+        "strconv"
+
+        "yadro.com/course/api/adapters/rest/middleware"
+        "yadro.com/course/api/core"
+)
+
+func NewLoginHandler(log *slog.Logger, a core.Loginer) http.HandlerFunc <span class="cov5" title="2">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov5" title="2">{
+                var user struct {
+                        Name     string `json:"name"`
+                        Password string `json:"password"`
+                }
+
+                if err := json.NewDecoder(r.Body).Decode(&amp;user); err != nil </span><span class="cov0" title="0">{
+                        log.Error("failed to decode req", "error", err)
+                        http.Error(w, "Bad request", http.StatusBadRequest)
+                        return
+                }</span>
+
+                <span class="cov5" title="2">token, err := a.Login(user.Name, user.Password)
+                if err != nil </span><span class="cov1" title="1">{
+                        http.Error(w, "Unauthorized", http.StatusUnauthorized)
+                        return
+                }</span>
+
+                <span class="cov1" title="1">w.Header().Set("Content-Type", "text/plain")
+                if _, err = w.Write([]byte(token)); err != nil </span><span class="cov0" title="0">{
+                        log.Error("failed to send token", "error", err)
+                }</span>
+        }
+}
+
+func NewPingHandler(log *slog.Logger, pingers map[string]core.Pinger) http.HandlerFunc <span class="cov1" title="1">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov1" title="1">{
+                replies := make(map[string]string)
+
+                for name, pinger := range pingers </span><span class="cov1" title="1">{
+                        if err := pinger.Ping(r.Context()); err != nil </span><span class="cov0" title="0">{
+                                replies[name] = "unavailable"
+                                log.Error("Service unavailable", "service", name, "error", err)
+                        }</span> else<span class="cov1" title="1"> {
+                                replies[name] = "ok"
+                        }</span>
+                }
+
+                <span class="cov1" title="1">w.Header().Set("Content-Type", "application/json")
+                if err := json.NewEncoder(w).Encode(map[string]interface{}{"replies": replies}); err != nil </span><span class="cov0" title="0">{
+                        log.Error("failed to encode response", "error", err)
+                }</span>
+        }
+
+}
+
+func NewUpdateHandler(log *slog.Logger, updater core.Updater, verifier core.TokenVerifier) http.HandlerFunc <span class="cov10" title="4">{
+        handler := func(w http.ResponseWriter, r *http.Request) </span><span class="cov5" title="2">{
+                err := updater.Update(r.Context())
+                if err != nil </span><span class="cov1" title="1">{
+                        http.Error(w, "update is already exists", http.StatusAccepted)
+                }</span>
+        }
+
+        <span class="cov10" title="4">return middleware.Auth(handler, verifier)</span>
+}
+
+func NewUpdateStatsHandler(log *slog.Logger, updater core.Updater) http.HandlerFunc <span class="cov0" title="0">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+                stats, err := updater.Stats(r.Context())
+                if err != nil </span><span class="cov0" title="0">{
+                        log.Error("failed to get stats", "error", err)
+                        http.Error(w, "failed to get stats", http.StatusInternalServerError)
+                        return
+                }</span>
+
+                <span class="cov0" title="0">resp := map[string]int{
+                        "words_total":    stats.WordsTotal,
+                        "words_unique":   stats.WordsUnique,
+                        "comics_fetched": stats.ComicsFetched,
+                        "comics_total":   stats.ComicsTotal,
+                }
+                w.Header().Set("Content-Type", "application/json")
+                if err := json.NewEncoder(w).Encode(resp); err != nil </span><span class="cov0" title="0">{
+                        log.Error("failed to encode stats", "error", err)
+                }</span>
+        }
+}
+
+func NewUpdateStatusHandler(log *slog.Logger, updater core.Updater) http.HandlerFunc <span class="cov0" title="0">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+
+                status, err := updater.Status(r.Context())
+                if err != nil </span><span class="cov0" title="0">{
+                        log.Error("failed to get status", "error", err)
+                        http.Error(w, "failed to get status", http.StatusInternalServerError)
+                        return
+                }</span>
+
+                <span class="cov0" title="0">w.Header().Set("Content-Type", "application/json")
+                if err := json.NewEncoder(w).Encode(map[string]core.UpdateStatus{"status": status}); err != nil </span><span class="cov0" title="0">{
+                        log.Error("failed to encode status response", "error", err)
+                }</span>
+        }
+}
+
+func NewDropHandler(log *slog.Logger, updater core.Updater, verifier core.TokenVerifier) http.HandlerFunc <span class="cov8" title="3">{
+        handler := func(w http.ResponseWriter, r *http.Request) </span><span class="cov5" title="2">{
+                err := updater.Drop(r.Context())
+                if err != nil </span><span class="cov1" title="1">{
+                        log.Error("failed to drop", "error", err)
+                        http.Error(w, "failed to drop", http.StatusInternalServerError)
+                }</span>
+        }
+
+        <span class="cov8" title="3">return middleware.Auth(handler, verifier)</span>
+}
+
+func NewSearchHandler(log *slog.Logger, searcher core.Searcher, concurrencyLimit int) http.HandlerFunc <span class="cov10" title="4">{
+        handler := func(w http.ResponseWriter, r *http.Request) </span><span class="cov10" title="4">{
+                phrase := r.URL.Query().Get("phrase")
+                if phrase == "" </span><span class="cov1" title="1">{
+                        http.Error(w, "Bad arguments", http.StatusBadRequest)
+                        return
+                }</span>
+
+                <span class="cov8" title="3">limit := r.URL.Query().Get("limit")
+                if limit == "" </span><span class="cov0" title="0">{
+                        limit = "10"
+                }</span>
+
+                <span class="cov8" title="3">num, err := strconv.Atoi(limit)
+                if err != nil </span><span class="cov1" title="1">{
+                        http.Error(w, "Bad arguments", http.StatusBadRequest)
+                        return
+                }</span>
+
+                <span class="cov5" title="2">comics, err := searcher.Search(r.Context(), num, phrase)
+                if err != nil </span><span class="cov1" title="1">{
+                        log.Error("arguments are not acceptable", "error", err)
+                        http.Error(w, "Bad arguments", http.StatusBadRequest)
+                        return
+                }</span>
+
+                <span class="cov1" title="1">resp := map[string]interface{}{
+                        "comics": make([]map[string]interface{}, 0, len(comics)),
+                        "total":  len(comics),
+                }
+
+                for _, comic := range comics </span><span class="cov1" title="1">{
+                        resp["comics"] = append(resp["comics"].([]map[string]interface{}), map[string]interface{}{
+                                "id":  comic.ID,
+                                "url": comic.URL,
+                        })
+                }</span>
+
+                <span class="cov1" title="1">w.Header().Set("Content-Type", "application/json")
+                if err := json.NewEncoder(w).Encode(resp); err != nil </span><span class="cov0" title="0">{
+                        log.Error("failed to encode response", "error", err)
+                }</span>
+        }
+
+        <span class="cov10" title="4">return middleware.Concurrency(handler, concurrencyLimit)</span>
+}
+
+func NewIndexSearchHandler(log *slog.Logger, searcher core.Searcher, rateLimit int) http.HandlerFunc <span class="cov1" title="1">{
+        handler := func(w http.ResponseWriter, r *http.Request) </span><span class="cov1" title="1">{
+                phrase := r.URL.Query().Get("phrase")
+                if phrase == "" </span><span class="cov0" title="0">{
+                        http.Error(w, "Bad arguments", http.StatusBadRequest)
+                        return
+                }</span>
+
+                <span class="cov1" title="1">limit := r.URL.Query().Get("limit")
+                if limit == "" </span><span class="cov0" title="0">{
+                        limit = "10"
+                }</span>
+
+                <span class="cov1" title="1">num, err := strconv.Atoi(limit)
+                if err != nil </span><span class="cov0" title="0">{
+                        http.Error(w, "Bad arguments", http.StatusBadRequest)
+                        return
+                }</span>
+
+                <span class="cov1" title="1">comics, err := searcher.IndexSearch(r.Context(), num, phrase)
+                if err != nil </span><span class="cov0" title="0">{
+                        if len(comics) == 0 </span><span class="cov0" title="0">{
+                                return
+                        }</span>
+                        <span class="cov0" title="0">log.Error("arguments are not acceptable", "error", err)
+                        http.Error(w, "Bad arguments", http.StatusBadRequest)
+                        return</span>
+                }
+
+                <span class="cov1" title="1">resp := map[string]interface{}{
+                        "comics": make([]map[string]interface{}, 0, len(comics)),
+                        "total":  len(comics),
+                }
+
+                for _, comic := range comics </span><span class="cov1" title="1">{
+                        resp["comics"] = append(resp["comics"].([]map[string]interface{}), map[string]interface{}{
+                                "id":  comic.ID,
+                                "url": comic.URL,
+                        })
+                }</span>
+
+                <span class="cov1" title="1">w.Header().Set("Content-Type", "application/json")
+                if err := json.NewEncoder(w).Encode(resp); err != nil </span><span class="cov0" title="0">{
+                        log.Error("failed to encode response", "error", err)
+                }</span>
+        }
+
+        <span class="cov1" title="1">return middleware.Rate(handler, rateLimit)</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package middleware
+
+import (
+        "net/http"
+        "strings"
+
+        "yadro.com/course/api/core"
+)
+
+func Auth(next http.HandlerFunc, verifier core.TokenVerifier) http.HandlerFunc <span class="cov10" title="5">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov10" title="5">{
+                authHeader := r.Header.Get("Authorization")
+                if authHeader == "" </span><span class="cov1" title="1">{
+                        http.Error(w, "Unauthorized", http.StatusUnauthorized)
+                        return
+                }</span>
+
+                <span class="cov8" title="4">tokenString := strings.Split(authHeader, " ")
+                if len(tokenString) != 2 </span><span class="cov4" title="2">{
+                        http.Error(w, "Unauthorized", http.StatusUnauthorized)
+                        return
+                }</span>
+
+                <span class="cov4" title="2">token := tokenString[1]
+                if err := verifier.Verify(token); err != nil </span><span class="cov1" title="1">{
+                        http.Error(w, "Unauthorized", http.StatusUnauthorized)
+                        return
+                }</span>
+
+                <span class="cov1" title="1">next(w, r)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package middleware
+
+import "net/http"
+
+type concurrencyLimiter struct {
+        sema chan struct{}
+}
+
+func newConcurrencyLimiter(limit int) *concurrencyLimiter <span class="cov6" title="2">{
+        return &amp;concurrencyLimiter{
+                sema: make(chan struct{}, limit),
+        }
+}</span>
+
+func Concurrency(next http.HandlerFunc, limit int) http.HandlerFunc <span class="cov6" title="2">{
+        limiter := newConcurrencyLimiter(limit)
+
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov10" title="3">{
+                select </span>{
+                case limiter.sema &lt;- struct{}{}:<span class="cov6" title="2">
+                        defer func() </span><span class="cov6" title="2">{ &lt;-limiter.sema }</span>()
+                        <span class="cov6" title="2">next.ServeHTTP(w, r)</span>
+                default:<span class="cov1" title="1">
+                        http.Error(w, "Service unavailable", http.StatusServiceUnavailable)</span>
+                }
+        }
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package middleware
+
+import (
+        "net/http"
+
+        "golang.org/x/time/rate"
+)
+
+func Rate(next http.HandlerFunc, rps int) http.HandlerFunc <span class="cov6" title="2">{
+        rateLimiter := rate.NewLimiter(rate.Limit(rps), 1)
+
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov10" title="3">{
+                if err := rateLimiter.Wait(r.Context()); err != nil </span><span class="cov1" title="1">{
+                        return
+                }</span>
+                <span class="cov6" title="2">next.ServeHTTP(w, r)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package search
+
+import (
+        "context"
+        "fmt"
+        "log/slog"
+
+        "google.golang.org/grpc"
+        "google.golang.org/grpc/credentials/insecure"
+        "yadro.com/course/api/core"
+        searchpb "yadro.com/course/proto/search"
+)
+
+type Client struct {
+        log    *slog.Logger
+        client searchpb.SearchClient
+}
+
+func NewClient(address string, log *slog.Logger) (*Client, error) <span class="cov0" title="0">{
+        conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+        fmt.Println("search client address", address)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;Client{
+                client: searchpb.NewSearchClient(conn),
+                log:    log,
+        }, nil</span>
+}
+
+func (c Client) Ping(ctx context.Context) error <span class="cov0" title="0">{
+        _, err := c.client.Ping(ctx, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to ping", "error", err)
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (c Client) Search(ctx context.Context, limit int, phrase string) ([]core.Comics, error) <span class="cov0" title="0">{
+        req := &amp;searchpb.SearchRequest{
+                Phrase: phrase,
+                Limit:  int64(limit),
+        }
+
+        resp, err := c.client.Search(ctx, req)
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to search comics", "error", err)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">comics := make([]core.Comics, len(resp.GetComics()))
+        for i, comic := range resp.GetComics() </span><span class="cov0" title="0">{
+                comics[i] = core.Comics{
+                        ID:  int(comic.GetId()),
+                        URL: comic.GetUrl(),
+                }
+        }</span>
+
+        <span class="cov0" title="0">return comics, nil</span>
+}
+
+func (c Client) IndexSearch(ctx context.Context, limit int, phrase string) ([]core.Comics, error) <span class="cov0" title="0">{
+        req := &amp;searchpb.SearchRequest{
+                Phrase: phrase,
+                Limit:  int64(limit),
+        }
+
+        resp, err := c.client.IndexSearch(ctx, req)
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to search comics", "error", err)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">comics := make([]core.Comics, len(resp.GetComics()))
+        for i, comic := range resp.GetComics() </span><span class="cov0" title="0">{
+                comics[i] = core.Comics{
+                        ID:  int(comic.GetId()),
+                        URL: comic.GetUrl(),
+                }
+        }</span>
+
+        <span class="cov0" title="0">return comics, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package update
+
+import (
+        "context"
+        "log/slog"
+
+        "google.golang.org/grpc"
+        "google.golang.org/grpc/credentials/insecure"
+        "yadro.com/course/api/core"
+        updatepb "yadro.com/course/proto/update"
+)
+
+type Client struct {
+        log    *slog.Logger
+        client updatepb.UpdateClient
+}
+
+func NewClient(address string, log *slog.Logger) (*Client, error) <span class="cov0" title="0">{
+        conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;Client{
+                client: updatepb.NewUpdateClient(conn),
+                log:    log,
+        }, nil</span>
+}
+
+func (c Client) Ping(ctx context.Context) error <span class="cov0" title="0">{
+        _, err := c.client.Ping(ctx, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to ping", "error", err)
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (c Client) Status(ctx context.Context) (core.UpdateStatus, error) <span class="cov0" title="0">{
+        status, err := c.client.Status(ctx, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to get status", "error", err)
+                return core.StatusUpdateUnknown, err
+        }</span>
+
+        <span class="cov0" title="0">var out core.UpdateStatus
+        switch status.Status </span>{
+        case updatepb.Status_STATUS_IDLE:<span class="cov0" title="0">
+                out = core.StatusUpdateIdle</span>
+        case updatepb.Status_STATUS_RUNNING:<span class="cov0" title="0">
+                out = core.StatusUpdateRunning</span>
+        default:<span class="cov0" title="0">
+                out = core.StatusUpdateUnknown</span>
+        }
+        <span class="cov0" title="0">return out, nil</span>
+}
+
+func (c Client) Stats(ctx context.Context) (core.UpdateStats, error) <span class="cov0" title="0">{
+        stats, err := c.client.Stats(ctx, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to get stats", "error", err)
+                return core.UpdateStats{}, err
+        }</span>
+        <span class="cov0" title="0">return core.UpdateStats{
+                WordsTotal:    int(stats.WordsTotal),
+                WordsUnique:   int(stats.WordsUnique),
+                ComicsFetched: int(stats.ComicsFetched),
+                ComicsTotal:   int(stats.ComicsTotal),
+        }, nil</span>
+}
+
+func (c Client) Update(ctx context.Context) error <span class="cov0" title="0">{
+        _, err := c.client.Update(ctx, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to update db", "error", err)
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (c Client) Drop(ctx context.Context) error <span class="cov0" title="0">{
+        _, err := c.client.Drop(ctx, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to drop", "error", err)
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package words
+
+import (
+        "context"
+        "log/slog"
+
+        "google.golang.org/grpc"
+        "google.golang.org/grpc/credentials/insecure"
+        wordspb "yadro.com/course/proto/words"
+)
+
+type Client struct {
+        log    *slog.Logger
+        client wordspb.WordsClient
+}
+
+func NewClient(address string, log *slog.Logger) (*Client, error) <span class="cov0" title="0">{
+        conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("failed to connect to words service", "error", err)
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;Client{
+                client: wordspb.NewWordsClient(conn),
+                log:    log,
+        }, nil</span>
+}
+
+func (c Client) Norm(ctx context.Context, phrase string) ([]string, error) <span class="cov0" title="0">{
+        resp, err := c.client.Norm(ctx, &amp;wordspb.WordsRequest{Phrase: phrase})
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to normalize words", "error", err)
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return resp.Words, nil</span>
+}
+
+func (c Client) Ping(ctx context.Context) error <span class="cov0" title="0">{
+        _, err := c.client.Ping(ctx, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to ping words", "error", err)
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package config
+
+import (
+        "log"
+        "time"
+
+        "github.com/ilyakaznacheev/cleanenv"
+)
+
+type HTTPConfig struct {
+        Address string        `yaml:"address" env:"API_ADDRESS" env-default:"localhost:80"`
+        Timeout time.Duration `yaml:"timeout" env:"API_TIMEOUT" env-default:"5s"`
+}
+
+type Config struct {
+        LogLevel          string        `yaml:"log_level" env:"LOG_LEVEL" env-default:"DEBUG"`
+        SearchConcurrency int           `yaml:"search_concurrency" env:"SEARCH_CONCURRENCY" env-default:"1"`
+        SearchRate        int           `yaml:"search_rate" env:"SEARCH_RATE" env-default:"1"`
+        HTTPConfig        HTTPConfig    `yaml:"api_server"`
+        WordsAddress      string        `yaml:"words_address" env:"WORDS_ADDRESS" env-default:"words:81"`
+        UpdateAddress     string        `yaml:"update_address" env:"UPDATE_ADDRESS" env-default:"update:82"`
+        SearchAddress     string        `yaml:"search_address" env:"SEARCH_ADDRESS" env-default:"search:83"`
+        TokenTTL          time.Duration `yaml:"token_ttl" env:"TOKEN_TTL" env-default:"24h"`
+}
+
+func MustLoad(configPath string) Config <span class="cov10" title="3">{
+        var cfg Config
+        if err := cleanenv.ReadConfig(configPath, &amp;cfg); err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("cannot read config %q: %s", configPath, err)
+        }</span>
+        <span class="cov10" title="3">return cfg</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package main
+
+import (
+        "context"
+        "errors"
+        "flag"
+        "log/slog"
+        "net/http"
+        "os"
+        "os/signal"
+
+        "yadro.com/course/api/adapters/aaa"
+        "yadro.com/course/api/adapters/rest"
+        "yadro.com/course/api/adapters/search"
+        "yadro.com/course/api/adapters/update"
+        "yadro.com/course/api/adapters/words"
+        "yadro.com/course/api/config"
+        "yadro.com/course/api/core"
+)
+
+func main() <span class="cov0" title="0">{
+        var configPath string
+        flag.StringVar(&amp;configPath, "config", "config.yaml", "server configuration file")
+        flag.Parse()
+
+        cfg := config.MustLoad(configPath)
+
+        log := mustMakeLogger(cfg.LogLevel)
+
+        log.Info("starting server")
+        log.Debug("debug messages are enabled")
+
+        updateClient, err := update.NewClient(cfg.UpdateAddress, log)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("cannot init words adapter", "error", err)
+                os.Exit(1)
+        }</span>
+
+        <span class="cov0" title="0">searchClient, err := search.NewClient(cfg.SearchAddress, log)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("cannot init search adapter", "error", err)
+                os.Exit(1)
+        }</span>
+
+        <span class="cov0" title="0">wordsClient, err := words.NewClient(cfg.WordsAddress, log)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("cannot init words adapter", "error", err)
+                os.Exit(1)
+        }</span>
+
+        <span class="cov0" title="0">aaa, err := aaa.New(cfg.TokenTTL, log)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("cannot init aaa adapter", "error", err)
+                os.Exit(1)
+        }</span>
+
+        <span class="cov0" title="0">mux := http.NewServeMux()
+        mux.Handle("POST /api/login", rest.NewLoginHandler(log, aaa))
+        mux.Handle("GET /api/ping", rest.NewPingHandler(log, map[string]core.Pinger{"words": wordsClient, "update": updateClient, "search": searchClient}))
+        mux.Handle("GET /api/search", rest.NewSearchHandler(log, searchClient, cfg.SearchConcurrency))
+        mux.Handle("GET /api/isearch", rest.NewIndexSearchHandler(log, searchClient, cfg.SearchRate))
+        mux.Handle("POST /api/db/update", rest.NewUpdateHandler(log, updateClient, aaa))
+        mux.Handle("GET /api/db/stats", rest.NewUpdateStatsHandler(log, updateClient))
+        mux.Handle("GET /api/db/status", rest.NewUpdateStatusHandler(log, updateClient))
+        mux.Handle("DELETE /api/db", rest.NewDropHandler(log, updateClient, aaa))
+
+        server := http.Server{
+                Addr:        cfg.HTTPConfig.Address,
+                ReadTimeout: cfg.HTTPConfig.Timeout,
+                Handler:     mux,
+        }
+
+        ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+        defer stop()
+
+        go func() </span><span class="cov0" title="0">{
+                &lt;-ctx.Done()
+                log.Debug("shutting down server")
+                if err := server.Shutdown(context.Background()); err != nil </span><span class="cov0" title="0">{
+                        log.Error("erroneous shutdown", "error", err)
+                }</span>
+        }()
+
+        <span class="cov0" title="0">log.Info("Running HTTP server", "address", cfg.HTTPConfig.Address)
+        if err := server.ListenAndServe(); err != nil </span><span class="cov0" title="0">{
+                if !errors.Is(err, http.ErrServerClosed) </span><span class="cov0" title="0">{
+                        log.Error("server closed unexpectedly", "error", err)
+                        return
+                }</span>
+        }
+}
+
+func mustMakeLogger(logLevel string) *slog.Logger <span class="cov10" title="4">{
+        var level slog.Level
+        switch logLevel </span>{
+        case "DEBUG":<span class="cov1" title="1">
+                level = slog.LevelDebug</span>
+        case "INFO":<span class="cov1" title="1">
+                level = slog.LevelInfo</span>
+        case "ERROR":<span class="cov1" title="1">
+                level = slog.LevelError</span>
+        default:<span class="cov1" title="1">
+                panic("unknown log level: " + logLevel)</span>
+        }
+        <span class="cov8" title="3">handler := slog.NewTextHandler(os.Stderr, &amp;slog.HandlerOptions{Level: level})
+        return slog.New(handler)</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package db
+
+import (
+        "context"
+        "database/sql"
+        "errors"
+        "log/slog"
+
+        _ "github.com/jackc/pgx/v5/stdlib"
+        "github.com/jmoiron/sqlx"
+        "github.com/lib/pq"
+        "yadro.com/course/search/core"
+)
+
+type DB struct {
+        log  *slog.Logger
+        conn *sqlx.DB
+}
+
+func New(log *slog.Logger, address string) (*DB, error) <span class="cov0" title="0">{
+
+        db, err := sqlx.Connect("pgx", address)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("connection problem", "address", address, "error", err)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;DB{
+                log:  log,
+                conn: db,
+        }, nil</span>
+}
+
+func (db *DB) SearchComics(ctx context.Context, limit int, keywords []string) ([]core.Comics, error) <span class="cov6" title="2">{
+        query := `
+        SELECT comic_id, image_url
+        FROM comics
+        WHERE keywords &amp;&amp; $1
+        ORDER BY (
+                SELECT COUNT(*) 
+                FROM unnest(keywords) AS kw
+                WHERE kw = ANY($1)
+        ) DESC
+        LIMIT $2
+        `
+
+        var dbComics []core.DbComics
+        err := db.conn.SelectContext(ctx, &amp;dbComics, query, pq.Array(keywords), limit)
+        if err != nil </span><span class="cov0" title="0">{
+                db.log.Error("failed to do query", "error", err)
+                return nil, err
+        }</span>
+
+        <span class="cov6" title="2">comics := make([]core.Comics, len(dbComics))
+        for i, c := range dbComics </span><span class="cov6" title="2">{
+                comics[i] = core.Comics{
+                        ID:  c.ID,
+                        URL: c.URL,
+                }
+        }</span>
+        <span class="cov6" title="2">return comics, nil</span>
+}
+
+func (db *DB) GetImageURL(ctx context.Context, id int) (string, error) <span class="cov10" title="3">{
+        query := `SELECT image_url FROM comics WHERE comic_id = $1`
+
+        var imageURL string
+        err := db.conn.GetContext(ctx, &amp;imageURL, query, id)
+        if err != nil </span><span class="cov6" title="2">{
+                if errors.Is(err, sql.ErrNoRows) </span><span class="cov1" title="1">{
+                        return "", nil
+                }</span>
+                <span class="cov1" title="1">db.log.Error("failed to get image_url", "error", err)
+                return "", err</span>
+        }
+
+        <span class="cov1" title="1">return imageURL, nil</span>
+
+}
+
+func (db *DB) GetComics(ctx context.Context) ([]core.Comics, error) <span class="cov0" title="0">{
+        query := `
+        SELECT 
+            comic_id, 
+            ARRAY_TO_JSON(COALESCE(keywords, ARRAY[]::TEXT[])) AS keywords
+        FROM comics
+    `
+
+        var comics []core.DbComics
+        err := db.conn.SelectContext(ctx, &amp;comics, query)
+        if err != nil </span><span class="cov0" title="0">{
+                db.log.Error("failed to get comics", "error", err)
+                return []core.Comics{}, err
+        }</span>
+
+        <span class="cov0" title="0">out := make([]core.Comics, len(comics))
+        for i, c := range comics </span><span class="cov0" title="0">{
+                out[i] = core.Comics{
+                        ID:       c.ID,
+                        Keywords: c.Keywords,
+                }
+        }</span>
+
+        <span class="cov0" title="0">return out, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package grpc
+
+import (
+        "context"
+
+        "google.golang.org/protobuf/types/known/emptypb"
+        searchpb "yadro.com/course/proto/search"
+        "yadro.com/course/search/core"
+)
+
+func NewServer(service core.Searcher) *Server <span class="cov0" title="0">{
+        return &amp;Server{service: service}
+}</span>
+
+type Server struct {
+        searchpb.UnimplementedSearchServer
+        service core.Searcher
+}
+
+func (s *Server) Ping(_ context.Context, _ *emptypb.Empty) (*emptypb.Empty, error) <span class="cov0" title="0">{
+        return &amp;emptypb.Empty{}, nil
+}</span>
+
+func (s *Server) Search(ctx context.Context, in *searchpb.SearchRequest) (*searchpb.SearchReply, error) <span class="cov0" title="0">{
+        comics, err := s.service.Search(ctx, int(in.Limit), in.Phrase)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">searchReply := &amp;searchpb.SearchReply{
+                Comics: make([]*searchpb.Comics, 0, len(comics)),
+                Total:  int64(len(comics)),
+        }
+
+        for _, comic := range comics </span><span class="cov0" title="0">{
+                searchReply.Comics = append(searchReply.Comics, &amp;searchpb.Comics{
+                        Id:  int64(comic.ID),
+                        Url: comic.URL,
+                })
+        }</span>
+        <span class="cov0" title="0">return searchReply, nil</span>
+}
+
+func (s *Server) IndexSearch(ctx context.Context, in *searchpb.SearchRequest) (*searchpb.SearchReply, error) <span class="cov0" title="0">{
+        comics, err := s.service.IndexSearch(ctx, int(in.Limit), in.Phrase)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">searchReply := &amp;searchpb.SearchReply{
+                Comics: make([]*searchpb.Comics, 0, len(comics)),
+                Total:  int64(len(comics)),
+        }
+
+        for _, comic := range comics </span><span class="cov0" title="0">{
+                searchReply.Comics = append(searchReply.Comics, &amp;searchpb.Comics{
+                        Id:  int64(comic.ID),
+                        Url: comic.URL,
+                })
+        }</span>
+        <span class="cov0" title="0">return searchReply, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package index
+
+import (
+        "context"
+        "encoding/json"
+        "log/slog"
+        "sort"
+        "time"
+
+        "yadro.com/course/search/core"
+)
+
+type Index struct {
+        log      *slog.Logger
+        indexTTL time.Duration
+        db       core.DB
+        storage  map[string][]int
+}
+
+func NewIndex(log *slog.Logger, db core.DB, indexTTL time.Duration) *Index <span class="cov0" title="0">{
+        index := &amp;Index{
+                log:      log,
+                indexTTL: indexTTL,
+                db:       db,
+        }
+
+        go index.UpdateIndex()
+        return index
+}</span>
+
+func (index *Index) UpdateIndex() <span class="cov0" title="0">{
+        ticker := time.NewTicker(index.indexTTL)
+        defer ticker.Stop()
+
+        for range ticker.C </span><span class="cov0" title="0">{
+                ctx := context.Background()
+                index.log.Info("updating index")
+                comics, err := index.db.GetComics(ctx)
+                if err != nil </span><span class="cov0" title="0">{
+                        index.log.Error("failed to get comics from db", "error", err)
+                }</span>
+
+                <span class="cov0" title="0">if err = index.BuildIndex(comics); err != nil </span><span class="cov0" title="0">{
+                        index.log.Error("failed to build index", "error", err)
+                }</span>
+        }
+}
+
+func (index *Index) BuildIndex(comics []core.Comics) error <span class="cov4" title="2">{
+        newIndex := make(map[string][]int)
+        for _, comic := range comics </span><span class="cov6" title="3">{
+                var keywords []string
+                if err := json.Unmarshal([]byte(comic.Keywords), &amp;keywords); err != nil </span><span class="cov1" title="1">{
+                        index.log.Error("failed to unmarshal keywords", "error", err)
+                        continue</span>
+                }
+
+                <span class="cov4" title="2">for _, word := range keywords </span><span class="cov6" title="3">{
+                        newIndex[word] = append(newIndex[word], comic.ID)
+                }</span>
+        }
+
+        <span class="cov4" title="2">index.storage = newIndex
+        return nil</span>
+}
+
+func (index Index) SearchByIndex(ctx context.Context, limit int, keywords []string) ([]core.Comics, error) <span class="cov6" title="3">{
+        comicCount := make(map[int]int)
+
+        for _, keyword := range keywords </span><span class="cov7" title="4">{
+                if ids, exists := index.storage[keyword]; exists </span><span class="cov7" title="4">{
+                        for _, id := range ids </span><span class="cov10" title="7">{
+                                comicCount[id]++
+                        }</span>
+                }
+        }
+
+        <span class="cov6" title="3">if len(comicCount) == 0 </span><span class="cov0" title="0">{
+                return []core.Comics{}, nil
+        }</span>
+
+        <span class="cov6" title="3">type comicRate struct {
+                id            int
+                keywordsCount int
+        }
+
+        var sortedComics []comicRate
+        for id, score := range comicCount </span><span class="cov9" title="6">{
+                sortedComics = append(sortedComics, comicRate{id, score})
+        }</span>
+
+        <span class="cov6" title="3">sort.Slice(sortedComics, func(i, j int) bool </span><span class="cov7" title="4">{
+                if sortedComics[i].keywordsCount == sortedComics[j].keywordsCount </span><span class="cov4" title="2">{
+                        return sortedComics[i].id &gt; sortedComics[j].id
+                }</span>
+                <span class="cov4" title="2">return sortedComics[i].keywordsCount &gt; sortedComics[j].keywordsCount</span>
+        })
+
+        <span class="cov6" title="3">resultCount := min(limit, len(sortedComics))
+        result := make([]core.Comics, 0, resultCount)
+
+        for i := 0; i &lt; resultCount; i++ </span><span class="cov9" title="6">{
+                imageUrl, err := index.db.GetImageURL(ctx, sortedComics[i].id)
+                if err != nil </span><span class="cov1" title="1">{
+                        index.log.Error("failed to get image from db", "error", err)
+                        return []core.Comics{}, err
+                }</span>
+
+                <span class="cov8" title="5">result = append(result, core.Comics{ID: sortedComics[i].id, URL: imageUrl})</span>
+        }
+
+        <span class="cov4" title="2">return result, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package words
+
+import (
+        "context"
+        "log/slog"
+
+        "google.golang.org/grpc"
+        "google.golang.org/grpc/credentials/insecure"
+        wordspb "yadro.com/course/proto/words"
+)
+
+type Client struct {
+        log    *slog.Logger
+        client wordspb.WordsClient
+}
+
+func NewClient(address string, log *slog.Logger) (*Client, error) <span class="cov0" title="0">{
+        conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;Client{
+                client: wordspb.NewWordsClient(conn),
+                log:    log,
+        }, nil</span>
+}
+
+func (c Client) Norm(ctx context.Context, phrase string) ([]string, error) <span class="cov0" title="0">{
+        resp, err := c.client.Norm(ctx, &amp;wordspb.WordsRequest{Phrase: phrase})
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to normalize words", "error", err)
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return resp.Words, nil</span>
+}
+
+func (c Client) Ping(ctx context.Context) error <span class="cov0" title="0">{
+        _, err := c.client.Ping(ctx, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to ping words", "error", err)
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package config
+
+import (
+        "log"
+        "time"
+
+        "github.com/ilyakaznacheev/cleanenv"
+)
+
+type Config struct {
+        LogLevel     string        `yaml:"log_level" env:"LOG_LEVEL" env-default:"DEBUG"`
+        Address      string        `yaml:"search_address" env:"SEARCH_ADDRESS" env-default:"localhost:83"`
+        DBAddress    string        `yaml:"db_address" env:"DB_ADDRESS" env-default:"localhost:82"`
+        WordsAddress string        `yaml:"words_address" env:"WORDS_ADDRESS" env-default:"localhost:81"`
+        IndexTTL     time.Duration `yaml:"index_ttl" env:"INDEX_TTL"`
+}
+
+func MustLoad(configPath string) Config <span class="cov10" title="3">{
+        var cfg Config
+        if err := cleanenv.ReadConfig(configPath, &amp;cfg); err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("cannot read config %q: %s", configPath, err)
+        }</span>
+        <span class="cov10" title="3">return cfg</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package core
+
+import (
+        "context"
+        "log/slog"
+)
+
+type Service struct {
+        log   *slog.Logger
+        db    DB
+        words Words
+        index Index
+}
+
+func NewService(log *slog.Logger, db DB, words Words, index Index) (*Service, error) <span class="cov1" title="1">{
+        service := &amp;Service{
+                log:   log,
+                db:    db,
+                words: words,
+                index: index,
+        }
+
+        return service, nil
+}</span>
+
+func (s Service) Search(ctx context.Context, limit int, phrase string) ([]Comics, error) <span class="cov10" title="4">{
+        normReq, err := s.words.Norm(ctx, phrase)
+        if err != nil </span><span class="cov1" title="1">{
+                s.log.Error("failed to normalize req", "error", err)
+                return []Comics{}, err
+        }</span>
+
+        <span class="cov8" title="3">comics, err := s.db.SearchComics(ctx, limit, normReq)
+        if err != nil </span><span class="cov1" title="1">{
+                s.log.Error("failed to search comics in db", "error", err)
+                return []Comics{}, err
+        }</span>
+
+        <span class="cov5" title="2">return comics, nil</span>
+}
+
+func (s Service) IndexSearch(ctx context.Context, limit int, phrase string) ([]Comics, error) <span class="cov8" title="3">{
+        normReq, err := s.words.Norm(ctx, phrase)
+        if err != nil </span><span class="cov1" title="1">{
+                s.log.Error("failed to normalize req", "error", err)
+                return []Comics{}, err
+        }</span>
+
+        <span class="cov5" title="2">comics, err := s.index.SearchByIndex(ctx, limit, normReq)
+        if err != nil </span><span class="cov1" title="1">{
+                s.log.Error("failed to isearch comics in db", "error", err)
+                return []Comics{}, err
+        }</span>
+
+        <span class="cov1" title="1">return comics, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package main
+
+import (
+        "context"
+        "flag"
+        "fmt"
+        "log/slog"
+        "net"
+        "os"
+        "os/signal"
+
+        "google.golang.org/grpc"
+        "google.golang.org/grpc/reflection"
+        searchpb "yadro.com/course/proto/search"
+        "yadro.com/course/search/adapters/db"
+        searchgrpc "yadro.com/course/search/adapters/grpc"
+        "yadro.com/course/search/adapters/index"
+        "yadro.com/course/search/adapters/words"
+        "yadro.com/course/search/config"
+        "yadro.com/course/search/core"
+)
+
+func run() error <span class="cov0" title="0">{
+        // config
+        var configPath string
+        flag.StringVar(&amp;configPath, "config", "config.yaml", "server configuration file")
+        flag.Parse()
+        cfg := config.MustLoad(configPath)
+
+        // logger
+        log := mustMakeLogger(cfg.LogLevel)
+
+        log.Info("starting server")
+        log.Debug("debug messages are enabled")
+
+        // database adapter
+        storage, err := db.New(log, cfg.DBAddress)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("failed to connect to db", "error", err)
+                return err
+        }</span>
+
+        // index adapter
+        <span class="cov0" title="0">index := index.NewIndex(log, storage, cfg.IndexTTL)
+
+        // words adapter
+        words, err := words.NewClient(cfg.WordsAddress, log)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("failed create Words client", "error", err)
+                os.Exit(1)
+        }</span>
+
+        // service
+        <span class="cov0" title="0">searcher, err := core.NewService(log, storage, words, index)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("failed create Update service", "error", err)
+                return err
+        }</span>
+
+        // grpc server
+        <span class="cov0" title="0">listener, err := net.Listen("tcp", cfg.Address)
+        fmt.Println("search server address", cfg.Address)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("failed to listen", "error", err)
+                return err
+        }</span>
+
+        <span class="cov0" title="0">s := grpc.NewServer()
+        searchpb.RegisterSearchServer(s, searchgrpc.NewServer(searcher))
+        reflection.Register(s)
+
+        // context for Ctrl-C
+        ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+        defer stop()
+
+        go func() </span><span class="cov0" title="0">{
+                &lt;-ctx.Done()
+                log.Debug("shutting down server")
+                s.GracefulStop()
+        }</span>()
+
+        <span class="cov0" title="0">if err := s.Serve(listener); err != nil </span><span class="cov0" title="0">{
+                log.Error("failed to serve", "erorr", err)
+                return err
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+func main() <span class="cov0" title="0">{
+        if err := run(); err != nil </span><span class="cov0" title="0">{
+                os.Exit(1)
+        }</span>
+}
+
+func mustMakeLogger(logLevel string) *slog.Logger <span class="cov0" title="0">{
+        var level slog.Level
+        switch logLevel </span>{
+        case "DEBUG":<span class="cov0" title="0">
+                level = slog.LevelDebug</span>
+        case "INFO":<span class="cov0" title="0">
+                level = slog.LevelInfo</span>
+        case "ERROR":<span class="cov0" title="0">
+                level = slog.LevelError</span>
+        default:<span class="cov0" title="0">
+                panic("unknown log level: " + logLevel)</span>
+        }
+        <span class="cov0" title="0">handler := slog.NewTextHandler(os.Stderr, &amp;slog.HandlerOptions{Level: level})
+        return slog.New(handler)</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package db
+
+import (
+        "embed"
+
+        "github.com/golang-migrate/migrate/v4"
+        "github.com/golang-migrate/migrate/v4/database/pgx"
+        "github.com/golang-migrate/migrate/v4/source/iofs"
+)
+
+//go:embed migrations/*.sql
+var migrationFiles embed.FS
+
+func (db *DB) Migrate() error <span class="cov0" title="0">{
+        db.log.Debug("running migration")
+        files, err := iofs.New(migrationFiles, "migrations") // get migrations from
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">driver, err := pgx.WithInstance(db.conn.DB, &amp;pgx.Config{})
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">m, err := migrate.NewWithInstance("iofs", files, "pgx", driver)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">err = m.Up()
+
+        if err != nil </span><span class="cov0" title="0">{
+                if err != migrate.ErrNoChange </span><span class="cov0" title="0">{
+                        db.log.Error("migration failed", "error", err)
+                        return err
+                }</span>
+                <span class="cov0" title="0">db.log.Debug("migration did not change anything")</span>
+        }
+
+        <span class="cov0" title="0">db.log.Debug("migration finished")
+        return nil</span>
+}
+
+func (db *DB) MigrateDown() error <span class="cov0" title="0">{
+        db.log.Debug("running down migration")
+        files, err := iofs.New(migrationFiles, "migrations") // get migrations from
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">driver, err := pgx.WithInstance(db.conn.DB, &amp;pgx.Config{})
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">m, err := migrate.NewWithInstance("iofs", files, "pgx", driver)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">err = m.Down()
+
+        if err != nil </span><span class="cov0" title="0">{
+                if err != migrate.ErrNoChange </span><span class="cov0" title="0">{
+                        db.log.Error("down migration failed", "error", err)
+                        return err
+                }</span>
+                <span class="cov0" title="0">db.log.Debug("down migration did not change anything")</span>
+        }
+
+        <span class="cov0" title="0">db.log.Debug("down migration finished")
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package db
+
+import (
+        "context"
+        "log/slog"
+
+        _ "github.com/jackc/pgx/v5/stdlib"
+        "github.com/jmoiron/sqlx"
+        "yadro.com/course/update/core"
+)
+
+type DB struct {
+        log  *slog.Logger
+        conn *sqlx.DB
+}
+
+func New(log *slog.Logger, address string) (*DB, error) <span class="cov0" title="0">{
+
+        db, err := sqlx.Connect("pgx", address)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("connection problem", "address", address, "error", err)
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;DB{
+                log:  log,
+                conn: db,
+        }, nil</span>
+}
+
+func (db *DB) Add(ctx context.Context, comics core.Comics) error <span class="cov0" title="0">{
+        query := `
+                INSERT INTO comics (comic_id, image_url, keywords)
+                VALUES (:id, :url, :words)
+                ON CONFLICT (comic_id) DO NOTHING;`
+
+        _, err := db.conn.NamedExecContext(ctx, query, comics)
+        if err != nil </span><span class="cov0" title="0">{
+                db.log.Error("failed to insert comic", "error", err, "comic_id", comics.ID)
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (db *DB) Stats(ctx context.Context) (core.DBStats, error) <span class="cov10" title="3">{
+        var stats core.DBStats
+
+        err := db.conn.GetContext(ctx, &amp;stats.ComicsFetched, `SELECT COALESCE(COUNT(*), 0) FROM comics;`)
+        if err != nil </span><span class="cov1" title="1">{
+                db.log.Error("failed to get comics count", "error", err)
+                return core.DBStats{}, err
+        }</span>
+
+        <span class="cov6" title="2">query := `
+                SELECT
+             COALESCE(SUM(array_length(keywords, 1)), 0) AS words_total,
+             COALESCE(COUNT(DISTINCT keyword), 0) AS words_unique
+                FROM comics,
+                LATERAL unnest(keywords) AS keyword;`
+
+        err = db.conn.GetContext(ctx, &amp;stats, query)
+        if err != nil </span><span class="cov1" title="1">{
+                db.log.Error("failed to get words stats", "error", err)
+                return core.DBStats{}, err
+        }</span>
+
+        <span class="cov1" title="1">return stats, nil</span>
+}
+
+func (db *DB) IDs(ctx context.Context) ([]int, error) <span class="cov10" title="3">{
+        var ids []int
+        err := db.conn.SelectContext(ctx, &amp;ids, `SELECT comic_id FROM comics;`)
+        if err != nil </span><span class="cov1" title="1">{
+                db.log.Error("failed to query comic IDs", "error", err)
+                return nil, err
+        }</span>
+
+        <span class="cov6" title="2">return ids, nil</span>
+}
+
+func (db *DB) Drop(ctx context.Context) error <span class="cov6" title="2">{
+        _, err := db.conn.ExecContext(ctx, `TRUNCATE TABLE comics;`)
+        if err != nil </span><span class="cov1" title="1">{
+                db.log.Error("failed to drop table", "error", err)
+                return err
+        }</span>
+        <span class="cov1" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package grpc
+
+import (
+        "context"
+
+        "google.golang.org/protobuf/types/known/emptypb"
+        updatepb "yadro.com/course/proto/update"
+        "yadro.com/course/update/core"
+)
+
+func NewServer(service core.Updater) *Server <span class="cov0" title="0">{
+        return &amp;Server{service: service}
+}</span>
+
+type Server struct {
+        updatepb.UnimplementedUpdateServer
+        service core.Updater
+}
+
+func (s *Server) Ping(_ context.Context, _ *emptypb.Empty) (*emptypb.Empty, error) <span class="cov0" title="0">{
+        return &amp;emptypb.Empty{}, nil
+}</span>
+
+func (s *Server) Status(ctx context.Context, _ *emptypb.Empty) (*updatepb.StatusReply, error) <span class="cov0" title="0">{
+        status := s.service.Status(ctx)
+
+        var out updatepb.Status
+        switch status </span>{
+        case core.StatusRunning:<span class="cov0" title="0">
+                out = updatepb.Status_STATUS_RUNNING</span>
+        case core.StatusIdle:<span class="cov0" title="0">
+                out = updatepb.Status_STATUS_IDLE</span>
+        default:<span class="cov0" title="0">
+                out = updatepb.Status_STATUS_UNSPECIFIED</span>
+        }
+        <span class="cov0" title="0">return &amp;updatepb.StatusReply{
+                Status: out,
+        }, nil</span>
+}
+
+func (s *Server) Update(ctx context.Context, _ *emptypb.Empty) (*emptypb.Empty, error) <span class="cov0" title="0">{
+        err := s.service.Update(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;emptypb.Empty{}, nil</span>
+}
+
+func (s *Server) Stats(ctx context.Context, _ *emptypb.Empty) (*updatepb.StatsReply, error) <span class="cov0" title="0">{
+        stats, err := s.service.Stats(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;updatepb.StatsReply{
+                WordsTotal:    int64(stats.WordsTotal),
+                WordsUnique:   int64(stats.WordsUnique),
+                ComicsTotal:   int64(stats.ComicsTotal),
+                ComicsFetched: int64(stats.ComicsFetched),
+        }, nil</span>
+}
+
+func (s *Server) Drop(ctx context.Context, _ *emptypb.Empty) (*emptypb.Empty, error) <span class="cov0" title="0">{
+        err := s.service.Drop(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;emptypb.Empty{}, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package words
+
+import (
+        "context"
+        "log/slog"
+
+        "google.golang.org/grpc"
+        "google.golang.org/grpc/credentials/insecure"
+        wordspb "yadro.com/course/proto/words"
+)
+
+type Client struct {
+        log    *slog.Logger
+        client wordspb.WordsClient
+}
+
+func NewClient(address string, log *slog.Logger) (*Client, error) <span class="cov0" title="0">{
+        conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return &amp;Client{
+                client: wordspb.NewWordsClient(conn),
+                log:    log,
+        }, nil</span>
+}
+
+func (c Client) Norm(ctx context.Context, phrase string) ([]string, error) <span class="cov0" title="0">{
+        resp, err := c.client.Norm(ctx, &amp;wordspb.WordsRequest{Phrase: phrase})
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to normalize words", "error", err)
+                return nil, err
+        }</span>
+        <span class="cov0" title="0">return resp.Words, nil</span>
+}
+
+func (c Client) Ping(ctx context.Context) error <span class="cov0" title="0">{
+        _, err := c.client.Ping(ctx, nil)
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to ping words", "error", err)
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package xkcd
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+        "log/slog"
+        "net/http"
+        "time"
+
+        "yadro.com/course/update/core"
+)
+
+type Client struct {
+        log    *slog.Logger
+        client http.Client
+        url    string
+}
+
+func NewClient(url string, timeout time.Duration, log *slog.Logger) (*Client, error) <span class="cov10" title="6">{
+        if url == "" </span><span class="cov1" title="1">{
+                return nil, fmt.Errorf("empty base url specified")
+        }</span>
+        <span class="cov9" title="5">return &amp;Client{
+                client: http.Client{Timeout: timeout},
+                log:    log,
+                url:    url,
+        }, nil</span>
+}
+
+func (c Client) Get(ctx context.Context, id int) (core.XKCDInfo, error) <span class="cov4" title="2">{
+        url := fmt.Sprintf("%s/%d/info.0.json", c.url, id)
+        resp, err := http.Get(url)
+        if err != nil </span><span class="cov0" title="0">{
+                c.log.Error("failed to send req", "info", err)
+                return core.XKCDInfo{}, err
+        }</span>
+        <span class="cov4" title="2">defer resp.Body.Close()
+
+        if resp.StatusCode != http.StatusOK </span><span class="cov1" title="1">{
+                if id == 404 </span><span class="cov1" title="1">{
+                        return core.XKCDInfo{}, core.Err404Comics
+                }</span>
+                <span class="cov0" title="0">return core.XKCDInfo{}, err</span>
+        }
+
+        <span class="cov1" title="1">var jsonInfo core.JsonXKCDInfo
+        if err := json.NewDecoder(resp.Body).Decode(&amp;jsonInfo); err != nil </span><span class="cov0" title="0">{
+                return core.XKCDInfo{}, err
+        }</span>
+
+        <span class="cov1" title="1">info := core.XKCDInfo(jsonInfo)
+
+        return info, nil</span>
+}
+
+func (c Client) LastID(ctx context.Context) (int, error) <span class="cov6" title="3">{
+        url := fmt.Sprintf("%s/info.0.json", c.url)
+        resp, err := http.Get(url)
+        if err != nil </span><span class="cov0" title="0">{
+                return 0, fmt.Errorf("failed to send req: %w", err)
+        }</span>
+        <span class="cov6" title="3">defer resp.Body.Close()
+
+        if resp.StatusCode != http.StatusOK </span><span class="cov1" title="1">{
+                return 0, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+        }</span>
+
+        <span class="cov4" title="2">var jsonInfo core.JsonXKCDInfo
+        if err := json.NewDecoder(resp.Body).Decode(&amp;jsonInfo); err != nil </span><span class="cov1" title="1">{
+                return 0, fmt.Errorf("failed to decode JSON: %w", err)
+        }</span>
+
+        <span class="cov1" title="1">return jsonInfo.ID, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package config
+
+import (
+        "log"
+        "time"
+
+        "github.com/ilyakaznacheev/cleanenv"
+)
+
+type XKCD struct {
+        URL         string        `yaml:"url" env:"XKCD_URL" env-default:"xkcd.com"`
+        Concurrency int           `yaml:"concurrency" env:"XKCD_CONCURRENCY" env-default:"1"`
+        Timeout     time.Duration `yaml:"timeout" env:"XKCD_TIMEOUT" env-default:"10s"`
+        CheckPeriod time.Duration `yaml:"check_period" env:"XKCD_CHECK_PERIOD" env-default:"1h"`
+}
+
+type Config struct {
+        LogLevel     string `yaml:"log_level" env:"LOG_LEVEL" env-default:"DEBUG"`
+        Address      string `yaml:"update_address" env:"UPDATE_ADDRESS" env-default:"localhost:83"`
+        XKCD         XKCD   `yaml:"xkcd"`
+        DBAddress    string `yaml:"db_address" env:"DB_ADDRESS" env-default:"localhost:82"`
+        WordsAddress string `yaml:"words_address" env:"WORDS_ADDRESS" env-default:"localhost:81"`
+}
+
+func MustLoad(configPath string) Config <span class="cov10" title="3">{
+        var cfg Config
+        if err := cleanenv.ReadConfig(configPath, &amp;cfg); err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("cannot read config %q: %s", configPath, err)
+        }</span>
+        <span class="cov10" title="3">return cfg</span>
+}
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package core
+
+import (
+        "context"
+        "errors"
+        "fmt"
+        "log/slog"
+        "sync"
+)
+
+type Service struct {
+        log         *slog.Logger
+        db          DB
+        xkcd        XKCD
+        words       Words
+        concurrency int
+        idsExists   map[int]struct{}
+        mu          sync.Mutex
+}
+
+func NewService(
+        log *slog.Logger, db DB, xkcd XKCD, words Words, concurrency int,
+) (*Service, error) <span class="cov0" title="0">{
+        if concurrency &lt; 1 </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("wrong concurrency specified: %d", concurrency)
+        }</span>
+        <span class="cov0" title="0">return &amp;Service{
+                log:         log,
+                db:          db,
+                xkcd:        xkcd,
+                words:       words,
+                concurrency: concurrency,
+                idsExists:   make(map[int]struct{}),
+        }, nil</span>
+}
+
+func (s *Service) Update(ctx context.Context) (err error) <span class="cov10" title="3">{
+        if !s.mu.TryLock() </span><span class="cov1" title="1">{
+                return ErrAlreadyExists
+        }</span>
+
+        <span class="cov6" title="2">defer s.mu.Unlock()
+        var wg sync.WaitGroup
+        id, err := s.xkcd.LastID(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                s.log.Error("failed to get LastID", "error", err)
+        }</span>
+
+        <span class="cov6" title="2">ids, err := s.db.IDs(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                s.log.Error("failed to get ids from db", "error", err)
+        }</span>
+
+        <span class="cov6" title="2">for i := range ids </span><span class="cov0" title="0">{
+                if _, ok := s.idsExists[i]; !ok </span><span class="cov0" title="0">{
+                        s.idsExists[i] = struct{}{}
+                }</span>
+        }
+
+        <span class="cov6" title="2">sema := make(chan struct{}, s.concurrency)
+        for i := 1; i &lt;= id; i++ </span><span class="cov10" title="3">{
+                if _, ok := s.idsExists[i]; ok </span><span class="cov0" title="0">{
+                        continue</span>
+                }
+                <span class="cov10" title="3">wg.Add(1)
+                sema &lt;- struct{}{}
+                go func() </span><span class="cov10" title="3">{
+                        defer func() </span><span class="cov10" title="3">{
+                                &lt;-sema
+                        }</span>()
+                        <span class="cov10" title="3">defer wg.Done()
+
+                        info, err := s.xkcd.Get(ctx, i)
+                        if err != nil </span><span class="cov1" title="1">{
+                                if errors.Is(err, Err404Comics) </span><span class="cov1" title="1">{
+                                        err = s.db.Add(ctx, Comics{ID: 404})
+                                        if err != nil </span><span class="cov0" title="0">{
+                                                s.log.Error("failed to save comics", "error", err)
+                                                return
+                                        }</span>
+                                        <span class="cov1" title="1">return</span>
+                                }
+                                <span class="cov0" title="0">s.log.Error("failed to get comics", "error", err)
+                                return</span>
+                        }
+
+                        <span class="cov6" title="2">phrase := info.Title + " " + info.Transcript + " " + info.SafeTitle + " " + info.Alt
+                        words, err := s.words.Norm(ctx, phrase)
+                        if err != nil </span><span class="cov0" title="0">{
+                                s.log.Error("failed to normalize words for ", "error", err)
+                                return
+                        }</span>
+
+                        <span class="cov6" title="2">comics := Comics{
+                                ID:    info.ID,
+                                URL:   info.URL,
+                                Words: words,
+                        }
+                        err = s.db.Add(ctx, comics)
+                        if err != nil </span><span class="cov0" title="0">{
+                                s.log.Error("failed to save comics", "error", err)
+                        }</span>
+                }()
+        }
+        <span class="cov6" title="2">wg.Wait()
+        return nil</span>
+}
+
+func (s *Service) Stats(ctx context.Context) (ServiceStats, error) <span class="cov10" title="3">{
+        stats, err := s.db.Stats(ctx)
+        if err != nil </span><span class="cov1" title="1">{
+                s.log.Error("failed to get stats", "error", err)
+                return ServiceStats{}, err
+        }</span>
+
+        <span class="cov6" title="2">comicsTotal, err := s.xkcd.LastID(ctx)
+        if err != nil </span><span class="cov1" title="1">{
+                s.log.Error("failed to get lastID", "error", err)
+                return ServiceStats{}, err
+        }</span>
+
+        <span class="cov1" title="1">return ServiceStats{
+                DBStats:     stats,
+                ComicsTotal: comicsTotal,
+        }, nil</span>
+}
+
+func (s *Service) Status(ctx context.Context) ServiceStatus <span class="cov6" title="2">{
+        var status ServiceStatus
+
+        if s.mu.TryLock() </span><span class="cov1" title="1">{
+                status = StatusIdle
+                s.mu.Unlock()
+        }</span> else<span class="cov1" title="1"> {
+                status = StatusRunning
+        }</span>
+
+        <span class="cov6" title="2">return status</span>
+}
+
+func (s *Service) Drop(ctx context.Context) error <span class="cov1" title="1">{
+        err := s.db.Drop(ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                s.log.Error("failed to drop", "error", err)
+        }</span>
+
+        <span class="cov1" title="1">s.idsExists = make(map[int]struct{})
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package main
+
+import (
+        "context"
+        "flag"
+        "log/slog"
+        "net"
+        "os"
+        "os/signal"
+
+        "google.golang.org/grpc"
+        "google.golang.org/grpc/reflection"
+        updatepb "yadro.com/course/proto/update"
+        "yadro.com/course/update/adapters/db"
+        updategrpc "yadro.com/course/update/adapters/grpc"
+        "yadro.com/course/update/adapters/words"
+        "yadro.com/course/update/adapters/xkcd"
+        "yadro.com/course/update/config"
+        "yadro.com/course/update/core"
+)
+
+func run() error <span class="cov0" title="0">{
+
+        // config
+        var configPath string
+        flag.StringVar(&amp;configPath, "config", "config.yaml", "server configuration file")
+        flag.Parse()
+        cfg := config.MustLoad(configPath)
+
+        // logger
+        log := mustMakeLogger(cfg.LogLevel)
+
+        log.Info("starting server")
+        log.Debug("debug messages are enabled")
+
+        // database adapter
+        storage, err := db.New(log, cfg.DBAddress)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("failed to connect to db", "error", err)
+                return err
+        }</span>
+        <span class="cov0" title="0">if err := storage.Migrate(); err != nil </span><span class="cov0" title="0">{
+                log.Error("failed to migrate db", "error", err)
+                return err
+        }</span>
+
+        // xkcd adapter
+        <span class="cov0" title="0">xkcd, err := xkcd.NewClient(cfg.XKCD.URL, cfg.XKCD.Timeout, log)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("failed create XKCD client", "error", err)
+                return err
+        }</span>
+
+        // words adapter
+        <span class="cov0" title="0">words, err := words.NewClient(cfg.WordsAddress, log)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("failed create Words client", "error", err)
+                os.Exit(1)
+        }</span>
+
+        // service
+        <span class="cov0" title="0">updater, err := core.NewService(log, storage, xkcd, words, cfg.XKCD.Concurrency)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("failed create Update service", "error", err)
+                return err
+        }</span>
+
+        // grpc server
+        <span class="cov0" title="0">listener, err := net.Listen("tcp", cfg.Address)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Error("failed to listen", "error", err)
+                return err
+        }</span>
+
+        <span class="cov0" title="0">s := grpc.NewServer()
+        updatepb.RegisterUpdateServer(s, updategrpc.NewServer(updater))
+        reflection.Register(s)
+
+        // context for Ctrl-C
+        ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+        defer stop()
+
+        go func() </span><span class="cov0" title="0">{
+                &lt;-ctx.Done()
+                log.Debug("shutting down server")
+                s.GracefulStop()
+        }</span>()
+
+        <span class="cov0" title="0">if err := s.Serve(listener); err != nil </span><span class="cov0" title="0">{
+                log.Error("failed to serve", "erorr", err)
+                return err
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+func main() <span class="cov0" title="0">{
+        if err := run(); err != nil </span><span class="cov0" title="0">{
+                os.Exit(1)
+        }</span>
+}
+
+func mustMakeLogger(logLevel string) *slog.Logger <span class="cov0" title="0">{
+        var level slog.Level
+        switch logLevel </span>{
+        case "DEBUG":<span class="cov0" title="0">
+                level = slog.LevelDebug</span>
+        case "INFO":<span class="cov0" title="0">
+                level = slog.LevelInfo</span>
+        case "ERROR":<span class="cov0" title="0">
+                level = slog.LevelError</span>
+        default:<span class="cov0" title="0">
+                panic("unknown log level: " + logLevel)</span>
+        }
+        <span class="cov0" title="0">handler := slog.NewTextHandler(os.Stderr, &amp;slog.HandlerOptions{Level: level})
+        return slog.New(handler)</span>
+}
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package main
+
+import (
+        "context"
+        "flag"
+        "log"
+        "net"
+
+        "github.com/ilyakaznacheev/cleanenv"
+        "google.golang.org/grpc"
+        "google.golang.org/grpc/reflection"
+        "google.golang.org/protobuf/types/known/emptypb"
+        wordspb "yadro.com/course/proto/words"
+        "yadro.com/course/words/words"
+)
+
+type config struct {
+        Address string `yaml:"address" env:"WORDS_ADDRESS"`
+}
+
+type server struct {
+        wordspb.UnimplementedWordsServer
+}
+
+func (s *server) Ping(_ context.Context, _ *emptypb.Empty) (*emptypb.Empty, error) <span class="cov0" title="0">{
+        return &amp;emptypb.Empty{}, nil
+}</span>
+
+func (s *server) Norm(_ context.Context, in *wordspb.WordsRequest) (*wordspb.WordsReply, error) <span class="cov0" title="0">{
+        out := words.NormalizedString(in.Phrase)
+        return &amp;wordspb.WordsReply{
+                Words: out,
+        }, nil
+}</span>
+
+func main() <span class="cov0" title="0">{
+        var cfg config
+        configPath := flag.String("config", "", "path to config file")
+        flag.Parse()
+
+        if *configPath != "" </span><span class="cov0" title="0">{
+                if err := cleanenv.ReadConfig(*configPath, &amp;cfg); err != nil </span><span class="cov0" title="0">{
+                        log.Printf("error reading config file: %v\n", err)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if err := cleanenv.ReadEnv(&amp;cfg); err != nil </span><span class="cov0" title="0">{
+                log.Printf("error reading env: %v\n", err)
+        }</span>
+
+        <span class="cov0" title="0">listener, err := net.Listen("tcp", cfg.Address)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("failed to listen: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">s := grpc.NewServer()
+        wordspb.RegisterWordsServer(s, &amp;server{})
+        reflection.Register(s)
+
+        log.Printf("server is listening on address: %s", cfg.Address)
+        if err := s.Serve(listener); err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("failed to serve: %v", err)
+        }</span>
+
+}
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package words
+
+import (
+        "strings"
+        "unicode"
+
+        "github.com/kljensen/snowball"
+)
+
+func IsStopWord(word string) bool <span class="cov6" title="15">{
+        switch word </span>{
+        case "a", "about", "above", "after", "again", "against", "all", "am", "an",
+                "and", "any", "are", "as", "at", "be", "because", "been", "before",
+                "being", "below", "between", "both", "but", "by", "can", "did", "do",
+                "does", "doing", "don", "down", "during", "each", "few", "for", "from",
+                "further", "had", "has", "have", "having", "he", "her", "here", "hers",
+                "herself", "him", "himself", "his", "how", "i", "if", "in", "into", "is",
+                "it", "its", "itself", "just", "me", "more", "most", "my", "myself",
+                "no", "nor", "not", "now", "of", "off", "on", "once", "only", "or",
+                "other", "our", "ours", "ourselves", "out", "over", "own", "s", "same",
+                "she", "should", "so", "some", "such", "t", "than", "that", "the", "their",
+                "theirs", "them", "themselves", "then", "there", "these", "they",
+                "this", "those", "through", "to", "too", "under", "until", "up",
+                "very", "was", "we", "were", "what", "when", "where", "which", "while",
+                "who", "whom", "why", "will", "with", "you", "your", "yours", "yourself",
+                "yourselves", "re", "ve", "d", "ll", "m":<span class="cov5" title="7">
+                return true</span>
+        }
+        <span class="cov5" title="8">return false</span>
+}
+
+func splitIntoWords(input string) []string <span class="cov5" title="9">{
+        return strings.FieldsFunc(input, func(r rune) bool </span><span class="cov10" title="75">{
+                return !unicode.IsLetter(r) &amp;&amp; !unicode.IsDigit(r)
+        }</span>)
+}
+
+func NormalizedString(word string) []string <span class="cov4" title="6">{
+        words := splitIntoWords(word)
+        out := []string{}
+        mp := make(map[string]struct{})
+
+        for _, word := range words </span><span class="cov6" title="13">{
+                normWord, err := snowball.Stem(word, "english", false)
+                if err != nil </span><span class="cov0" title="0">{
+                        continue</span>
+                }
+                <span class="cov6" title="13">if _, ok := mp[normWord]; ok </span><span class="cov1" title="1">{
+                        continue</span>
+                }
+                <span class="cov6" title="12">if IsStopWord(normWord) </span><span class="cov4" title="6">{
+                        continue</span>
+                }
+
+                <span class="cov4" title="6">mp[normWord] = struct{}{}
+                out = append(out, normWord)</span>
+        }
+
+        <span class="cov4" title="6">return out</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
